@@ -2,17 +2,16 @@ const { Route } = require("express");
 const express = require("express");
 const Router = express.Router();
 
-const casesControllers = require('../controllers/cases')
+const casesControllers = require("../controllers/cases");
 
+Router.get("/:id", casesControllers.getCaseById);
 
-Router.get('/report/',casesControllers.getCaseReporters)
+Router.get("/", casesControllers.getAllCases);
 
-Router.get('/:id', casesControllers.getCaseById)
+Router.delete("/delete/:id", casesControllers.deleteCase);
 
-Router.get("/", casesControllers.getAllCases)
+Router.post("/add/", casesControllers.addCase);
 
-Router.delete('/:id', casesControllers.deleteCase)
+Router.put("/update/", casesControllers.updateCase);
 
-Router.post('/',casesControllers.addCase)
-
-module.exports = Router; 
+module.exports = Router;

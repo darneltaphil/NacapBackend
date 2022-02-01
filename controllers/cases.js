@@ -174,8 +174,43 @@ const updateCase = async (req, res) => {
     }
   }
 };
+
+const getCaseReviewed = async (req, res) => {
+  try {
+    connection.query(
+      "SELECT COUNT(*) as reviewedCases FROM case_review",
+      (err, row) => {
+        !err
+          ? res.send(row)
+          : res.send({
+              status: false,
+              message: "Request could not be completed",
+            });
+      }
+    );
+  } catch (error) {}
+};
+
+const getCaseInvestigated = async (req, res) => {
+  try {
+    connection.query(
+      "SELECT COUNT(*) as investigatedCases FROM case_investigate",
+      (err, row) => {
+        !err
+          ? res.send(row)
+          : res.send({
+              status: false,
+              message: "Request could not be completed",
+            });
+      }
+    );
+  } catch (error) {}
+};
+
 exports.getAllCases = getAllCases;
 exports.getCaseById = getCaseById;
 exports.updateCase = updateCase;
 exports.deleteCase = deleteCase;
 exports.addCase = addCase;
+exports.getCaseReviewed = getCaseReviewed;
+exports.getCaseInvestigated = getCaseInvestigated;

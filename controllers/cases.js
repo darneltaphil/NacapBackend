@@ -71,17 +71,21 @@ const deleteCase = async (req, res) => {
 
 const addCase = async (req, res) => {
   const data = req.body;
+
+  //To check if the body contains any data
   const isEmpty = Object.keys(data).length === 0;
 
   if (isEmpty) {
     res.send({ status: false, message: "No data Received" });
   } else {
     try {
+      //Get only the values fron tge data object
       const formData = Object.values(data);
       connection.query(
         "INSERT INTO cases (case_id,\
             case_category_id, \
-            case_title,case_details, \
+            case_title,\
+            case_details, \
             case_region_id, \
             case_town, \
             case_location, \
@@ -116,7 +120,6 @@ const updateCase = async (req, res) => {
     res.send({ status: false, message: "No data Received" });
   } else {
     try {
-      //   const formData = [Object.values(data)];
       connection.query(
         "UPDATE  cases SET \
             case_category_id = " +

@@ -204,7 +204,27 @@ const getCaseInvestigated = async (req, res) => {
             });
       }
     );
-  } catch (error) {}
+  } catch (error) {
+    console(error);
+  }
+};
+
+const getCaseForwarded = async (req, res) => {
+  try {
+    connection.query(
+      "SELECT COUNT(*) as forwardedCases FROM case_forward",
+      (err, row) => {
+        !err
+          ? res.send(row)
+          : res.send({
+              status: false,
+              message: "Request could not be completed",
+            });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.getAllCases = getAllCases;
@@ -214,3 +234,4 @@ exports.deleteCase = deleteCase;
 exports.addCase = addCase;
 exports.getCaseReviewed = getCaseReviewed;
 exports.getCaseInvestigated = getCaseInvestigated;
+exports.getCaseForwarded = getCaseForwarded;

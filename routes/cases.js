@@ -1,8 +1,10 @@
-const { Route } = require("express");
+const { Route, application } = require("express");
 const express = require("express");
 const Router = express.Router();
 
 const casesControllers = require("../controllers/cases");
+
+Router.get("/forwarded/", casesControllers.getCaseForwarded);
 
 Router.get("/reviewed/", casesControllers.getCaseReviewed);
 

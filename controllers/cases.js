@@ -1,5 +1,26 @@
 const connection = require("../database/dbconfig");
 
+const getCaseSummary = async (req, res) => {
+  try {
+    connection.query(
+      "SELECT \
+       sum(CASE WHEN status =1 then 1 else 0 end) underReview, \
+       sum(CASE WHEN status = 2 then 1 else 0 end) reviewed,\
+       sum(CASE WHEN status = 3 then 1 else 0 end) underInvestigation,\
+       sum(CASE WHEN status = 4 then 1 else 0 end) investigated,\
+       sum(CASE WHEN status = 5 then 1 else 0 end) forwarded\
+       FROM cases",
+      (err, row) => {
+        !err
+          ? res.send(row)
+          : res.send({
+              status: false,
+              message: "Request could not be completed",
+            });
+      }
+    );
+  } catch (error) {}
+};
 const getAllCases = async (req, res) => {
   try {
     connection.query(
@@ -175,63 +196,64 @@ const updateCase = async (req, res) => {
   }
 };
 
-const getCaseReviewed = async (req, res) => {
-  try {
-    connection.query(
-      "SELECT COUNT(*) as reviewedCases FROM case_review",
-      (err, row) => {
-        !err
-          ? res.send(row)
-          : res.send({
-              status: false,
-              message: "Request could not be completed",
-            });
-      }
-    );
-  } catch (error) {}
-};
+// const getCaseReviewed = async (req, res) => {
+//   try {
+//     connection.query(
+//       "SELECT COUNT(*) as reviewedCases FROM case_review",
+//       (err, row) => {
+//         !err
+//           ? res.send(row)
+//           : res.send({
+//               status: false,
+//               message: "Request could not be completed",
+//             });
+//       }
+//     );
+//   } catch (error) {}
+// };
 
-const getCaseInvestigated = async (req, res) => {
-  try {
-    connection.query(
-      "SELECT COUNT(*) as investigatedCases FROM case_investigate",
-      (err, row) => {
-        !err
-          ? res.send(row)
-          : res.send({
-              status: false,
-              message: "Request could not be completed",
-            });
-      }
-    );
-  } catch (error) {
-    console(error);
-  }
-};
+// const getCaseInvestigated = async (req, res) => {
+//   try {
+//     connection.query(
+//       "SELECT COUNT(*) as investigatedCases FROM case_investigate",
+//       (err, row) => {
+//         !err
+//           ? res.send(row)
+//           : res.send({
+//               status: false,
+//               message: "Request could not be completed",
+//             });
+//       }
+//     );
+//   } catch (error) {
+//     console(error);
+//   }
+// };
 
-const getCaseForwarded = async (req, res) => {
-  try {
-    connection.query(
-      "SELECT COUNT(*) as forwardedCases FROM case_forward",
-      (err, row) => {
-        !err
-          ? res.send(row)
-          : res.send({
-              status: false,
-              message: "Request could not be completed",
-            });
-      }
-    );
-  } catch (error) {
-    console.log(error);
-  }
-};
+// const getCaseForwarded = async (req, res) => {
+//   try {
+//     connection.query(
+//       "SELECT COUNT(*) as forwardedCases FROM case_forward",
+//       (err, row) => {
+//         !err
+//           ? res.send(row)
+//           : res.send({
+//               status: false,
+//               message: "Request could not be completed",
+//             });
+//       }
+//     );
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 exports.getAllCases = getAllCases;
 exports.getCaseById = getCaseById;
 exports.updateCase = updateCase;
 exports.deleteCase = deleteCase;
 exports.addCase = addCase;
-exports.getCaseReviewed = getCaseReviewed;
-exports.getCaseInvestigated = getCaseInvestigated;
-exports.getCaseForwarded = getCaseForwarded;
+// exports.getCaseReviewed = getCaseReviewed;
+// exports.getCaseInvestigated = getCaseInvestigated;
+// exports.getCaseForwarded = getCaseForwarded;
+exports.getCaseSummary = getCaseSummary;

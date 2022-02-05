@@ -92,16 +92,43 @@ const deleteCase = async (req, res) => {
 
 const addCase = async (req, res) => {
   const data = req.body;
-
   //To check if the body contains any data
   const isEmpty = Object.keys(data).length === 0;
 
   if (isEmpty) {
     res.send({ status: false, message: "No data Received" });
   } else {
+    //We are destructuring the req.body
+    const {
+      category,
+      title,
+      details,
+      region,
+      town,
+      location,
+      reporter,
+      status,
+    } = req.body;
+
+    //We set status fine to 0 : till you find out what it means
+    const statusFine = "0";
+
+    //Setting a Date object to allow us to get the current date and time
+    const dateObject = new Date();
+    const date =
+      dateObject.getFullYear() +
+      `${"-"}` +
+      dateObject.getMonth() +
+      `${"-"}` +
+      dateObject.getDate();
+    const time =
+      dateObject.getHours() +
+      `${":"}` +
+      dateObject.getMinutes() +
+      `${":"}` +
+      dateObject.getSeconds();
+
     try {
-      //Get only the values fron tge data object
-      const formData = Object.values(data);
       connection.query(
         "INSERT INTO cases (case_id,\
             case_category_id, \
@@ -116,12 +143,29 @@ const addCase = async (req, res) => {
             status,\
             status_fine\
             )     \
-            VALUES (NULL,?)",
-        [formData],
+            VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?)",
+        [
+          category,
+          title,
+          details,
+          region,
+          town,
+          location,
+          reporter,
+          date,
+          time,
+          status,
+          statusFine,
+        ],
+
         (err, rows) => {
           if (!err) {
-            res.send({ status: true, message: "Data inserted sucessfully" });
+            res.send({
+              status: true,
+              message: "Data inserted sucessfully",
+            });
           } else {
+            console.log(err);
             res.send({ status: false, message: "Something went wrong" });
           }
         }
@@ -161,22 +205,10 @@ const updateCase = async (req, res) => {
             case_location='" +
           data.case_location +
           "', \
-            case_reporter_id=" +
-          data.case_reporter_id +
-          ", \
-            case_date='" +
-          data.case_date +
-          "', \
-            case_time='" +
-          data.case_time +
-          "', \
-            status=" +
+           status=" +
           data.status +
           ",\
-            status_fine=" +
-          data.status_fine +
-          "\
-            WHERE case_id = " +
+           WHERE case_id = " +
           data.case_id +
           "",
 
